@@ -14,7 +14,8 @@ public class MainServer {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Server s = new Server(1906);
+        s.attendi();
     }
     
 }

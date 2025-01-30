@@ -1,6 +1,9 @@
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -17,6 +20,26 @@ public class Server {
     Socket clientSocket;
     int porta;
     
-    public Server(){
+    public Server(int porta){
+        this.porta=porta;
+        try{
+            serverSocket = new ServerSocket(porta);
+            System.out.println("1) SERVER IN ASCOLTO");
+        }
+        catch(IOException ex){
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("ERRORE DEL SERVER NELLA FASE DI BINDING");
+        }
     }
-}
+    
+        public Socket attendi(){
+        try {
+            clientSocket = serverSocket.accept();
+            System.out.println("2) CONNESSIONE CON IL CLIENT AVVENUTA E DATA SOCKET CREATO");
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("PROBLEMI DI CONNESSIONE CON IL CLIENT");
+        }
+        return clientSocket;
+        }
+    }
