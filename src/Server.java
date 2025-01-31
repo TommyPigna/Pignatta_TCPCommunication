@@ -28,7 +28,7 @@ public class Server {
         }
         catch(IOException ex){
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("ERRORE DEL SERVER NELLA FASE DI BINDING");
+            System.err.println("ERRORE DEL SERVER NELLA FASE DI CONNESSIONE");
         }
     }
     
@@ -41,5 +41,27 @@ public class Server {
             System.err.println("PROBLEMI DI CONNESSIONE CON IL CLIENT");
         }
         return clientSocket;
+        }
+        
+        public void leggi(){
+        }
+        
+        public void scrivi(){
+            
+        }
+        
+        public void chiudi(){
+        if(clientSocket!=null){
+            try{
+                clientSocket.close();
+                System.out.println("5) CHIUSURA DELLA CONNESSIONE CON IL CLIENT");
+            }
+            catch(IOException ex){
+             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+        
+        public void termina(){
         }
     }
