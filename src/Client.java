@@ -1,6 +1,9 @@
 import java.net.ConnectException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,10 +31,33 @@ public class Client {
         try {
             socket = new Socket(nomeServer, porta);
             System.out.println("1) CONNESSIONE AVVENUTA CON IL SERVER");
+        } catch(ConnectException ex){
+            System.out.println("errore connessione Server");
+        } catch(UnknownHostException ex){
+            System.out.println("errore risoluzione del nome");
+        }catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("ERRORE NELLA CONNESSIONE");
+        }
+        }
+    
+     public void leggi() {
+       InputStream i;
+        try {
+            i = socket.getInputStream();
+            i.read();
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     
+      public void scrivi() {
+         try {
+             OutputStream o = socket.getOutputStream();
+             o.write(1);
+             o.flush();
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("ERRORE NELLA FASE DI COMUNICAZIONE");
-            
         }
     }
     
@@ -50,5 +76,4 @@ public class Client {
         }
     }
     
-}
 }

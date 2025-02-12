@@ -1,5 +1,8 @@
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -26,9 +29,14 @@ public class Server {
             serverSocket = new ServerSocket(porta);
             System.out.println("1) SERVER IN ASCOLTO");
         }
+        catch(BindException ex) {
+            System.out.println("porta occupata");
+        } catch(IllegalArgumentException ex) {
+             System.out.println("numero di porta non valido");
+        }
         catch(IOException ex){
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("ERRORE DEL SERVER NELLA FASE DI CONNESSIONE");
+            System.err.println("ERRORE DEL SERVER NELLA FASE DI BINDING");
         }
     }
     
@@ -44,10 +52,24 @@ public class Server {
         }
         
         public void leggi(){
+           InputStream i;
+        try {
+            i = clientSocket.getInputStream();
+            i.read();
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
         }
         
         public void scrivi(){
-            
+            OutputStream o;
+        try {
+             o = clientSocket.getOutputStream();
+             o.write(1);
+             o.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
         }
         
         public void chiudi(){
@@ -63,5 +85,11 @@ public class Server {
     }
         
         public void termina(){
+           try {
+            serverSocket.close();
+            System.out.println("6) chiusura Server");
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+     }
+  }
