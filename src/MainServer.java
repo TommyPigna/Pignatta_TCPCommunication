@@ -19,13 +19,13 @@ public class MainServer {
     public static void main(String[] args) {
         Server s = new Server(1906);
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Inserisci il numero di client con la quale si vuole realizzare una comunicazione TCP");
+        System.out.print("INSERISCI IL NUMERO DI CLIENT CON IL QUALE SI VUOLE REALIZZARE UN COMUNICAZIONE TCP: ");
         int numClient = scanner.nextInt();
         scanner.close();
         for(int i=0; i<numClient; i++){
         s.attendi();
-        //s.leggi();
-        //s.scrivi();
+        s.leggi();
+        s.scrivi();
         s.chiudi();
     }
         s.termina();

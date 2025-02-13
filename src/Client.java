@@ -1,9 +1,8 @@
+import java.io.*;
 import java.net.ConnectException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.Buffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,9 +31,9 @@ public class Client {
             socket = new Socket(nomeServer, porta);
             System.out.println("1) CONNESSIONE AVVENUTA CON IL SERVER");
         } catch(ConnectException ex){
-            System.out.println("errore connessione Server");
+            System.out.println("ERRORE DI CONNESSIONE CON IL SERVER");
         } catch(UnknownHostException ex){
-            System.out.println("errore risoluzione del nome");
+            System.out.println("ERRORE NELLA RISOLUZIONE DEL NOME");
         }catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("ERRORE NELLA CONNESSIONE");
@@ -43,19 +42,27 @@ public class Client {
     
      public void leggi() {
        InputStream i;
+       BufferedReader br;
+       String messaggio;
         try {
             i = socket.getInputStream();
-            i.read();
+            br=new BufferedReader(new InputStreamReader(i));
+            messaggio=br.readLine();
+            System.out.println("IL MESSAGGIO RICEVUTO E': "+messaggio);
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
      
       public void scrivi() {
+        OutputStream o;
+        BufferedWriter bw;
+        String s = "CLIENT ON";
          try {
-             OutputStream o = socket.getOutputStream();
-             o.write(1);
-             o.flush();
+             o = socket.getOutputStream();
+             bw = new BufferedWriter(new OutputStreamWriter(o));
+             bw.write(s+"\n");
+             bw.flush();
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }

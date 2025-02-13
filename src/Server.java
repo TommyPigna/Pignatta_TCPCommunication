@@ -1,7 +1,5 @@
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -30,9 +28,9 @@ public class Server {
             System.out.println("1) SERVER IN ASCOLTO");
         }
         catch(BindException ex) {
-            System.out.println("porta occupata");
+            System.out.println("LA PORTA E' OCCUPATA");
         } catch(IllegalArgumentException ex) {
-             System.out.println("numero di porta non valido");
+             System.out.println("IL NUMERO DI PORTA NON E' VALIDO ");
         }
         catch(IOException ex){
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
@@ -53,20 +51,29 @@ public class Server {
         
         public void leggi(){
            InputStream i;
+           BufferedReader br;
+           String s;
         try {
             i = clientSocket.getInputStream();
-            i.read();
+
+            br = new BufferedReader(new InputStreamReader(i));
+            s=br.readLine();
+            System.out.println("IL MESSAGGIO RICEVUTO E': "+s);
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("IL MESSAGGIO RICEVUTO NON E' STATO RICEVUTO ");
         }
         }
         
         public void scrivi(){
             OutputStream o;
+            BufferedWriter bw;
+            String mess = "SERVER ON";
         try {
              o = clientSocket.getOutputStream();
-             o.write(1);
-             o.flush();
+             bw=new BufferedWriter(new OutputStreamWriter(o));
+             bw.write(mess+"\n");
+             bw.flush();
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -87,7 +94,7 @@ public class Server {
         public void termina(){
            try {
             serverSocket.close();
-            System.out.println("6) chiusura Server");
+            System.out.println("6) CHIUSURA SERVER");
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
