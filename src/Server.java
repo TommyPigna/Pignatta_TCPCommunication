@@ -20,31 +20,33 @@ public class Server {
     ServerSocket serverSocket;
     Socket clientSocket;
     int porta;
+    public static final String BLUE = "\u001B[34m";
+    public static final String RESET = "\u001B[0m";
     
     public Server(int porta){
         this.porta=porta;
         try{
             serverSocket = new ServerSocket(porta);
-            System.out.println("1) SERVER IN ASCOLTO");
+            System.out.println(BLUE+"1) SERVER IN ASCOLTO"+RESET);
         }
         catch(BindException ex) {
-            System.out.println("LA PORTA E' OCCUPATA");
+            System.out.println(BLUE+"LA PORTA E' OCCUPATA"+RESET);
         } catch(IllegalArgumentException ex) {
-             System.out.println("IL NUMERO DI PORTA NON E' VALIDO ");
+             System.out.println(BLUE+"IL NUMERO DI PORTA NON E' VALIDO"+RESET);
         }
         catch(IOException ex){
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("ERRORE DEL SERVER NELLA FASE DI BINDING");
+            System.err.println(BLUE+"ERRORE DEL SERVER NELLA FASE DI BINDING"+RESET);
         }
     }
     
         public Socket attendi(){
         try {
             clientSocket = serverSocket.accept();
-            System.out.println("2) CONNESSIONE CON IL CLIENT AVVENUTA E DATA SOCKET CREATO");
+            System.out.println(BLUE+"2) CONNESSIONE CON IL CLIENT AVVENUTA E DATA SOCKET CREATO");
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("PROBLEMI DI CONNESSIONE CON IL CLIENT");
+            System.err.println(BLUE+"PROBLEMI DI CONNESSIONE CON IL CLIENT"+RESET);
         }
         return clientSocket;
         }
@@ -58,10 +60,10 @@ public class Server {
 
             br = new BufferedReader(new InputStreamReader(i));
             s=br.readLine();
-            System.out.println("IL MESSAGGIO RICEVUTO E': "+s);
+            System.out.println(BLUE+"IL MESSAGGIO RICEVUTO E': "+s+RESET);
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("IL MESSAGGIO RICEVUTO NON E' STATO RICEVUTO ");
+            System.out.println(BLUE+"IL MESSAGGIO NON E' STATO RICEVUTO"+RESET);
         }
         }
         
@@ -72,7 +74,7 @@ public class Server {
         try {
              o = clientSocket.getOutputStream();
              bw=new BufferedWriter(new OutputStreamWriter(o));
-             bw.write(mess+"\n");
+             bw.write(BLUE+mess+"\n"+RESET);
              bw.flush();
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -83,7 +85,7 @@ public class Server {
         if(clientSocket!=null){
             try{
                 clientSocket.close();
-                System.out.println("5) CHIUSURA DELLA CONNESSIONE CON IL CLIENT");
+                System.out.println(BLUE+"5) CHIUSURA DELLA CONNESSIONE CON IL CLIENT"+RESET);
             }
             catch(IOException ex){
              Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
@@ -94,7 +96,7 @@ public class Server {
         public void termina(){
            try {
             serverSocket.close();
-            System.out.println("6) CHIUSURA SERVER");
+            System.out.println(BLUE+"6) CHIUSURA SERVER"+RESET);
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
