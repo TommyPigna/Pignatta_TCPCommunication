@@ -20,7 +20,7 @@ public class Client {
     String nome;
     String colore;
     Socket socket;
-    public static final String GREEN = "\uF34F";
+    public static final String GREEN = "\u001B[32m";
     public static final String RESET = "\u001B[0m";
     
     public Client(String nome, String colore){
