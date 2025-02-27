@@ -18,7 +18,6 @@ import java.util.logging.Logger;
  */
 public class Client implements Runnable {
     String nome;
-    String colore;
     Socket socket;
     String nomeServer;
     int porta;
@@ -61,8 +60,17 @@ public class Client implements Runnable {
 
     public void scrivi() {
         OutputStream o;
+        BufferedReader br;
         BufferedWriter bw;
-        String s = "CLIENT ON";
+        String s;
+        System.out.println("INSERISCI IL MESSAGGIO DA INVIARE AL SERVER!");
+        br = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            s = br.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         try {
             o = socket.getOutputStream();
             bw = new BufferedWriter(new OutputStreamWriter(o));

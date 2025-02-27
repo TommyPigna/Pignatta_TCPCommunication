@@ -69,12 +69,20 @@ public class Server {
         
         public void scrivi(){
             OutputStream o;
+            BufferedReader br;
             BufferedWriter bw;
-            String mess = "SERVER ON";
+            String s;
+            System.out.println("INSERISCI IL MESSAGGIO DA INVIARE AL CLIENT!");
+            br = new BufferedReader(new InputStreamReader(System.in));
+            try {
+                s = br.readLine();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         try {
              o = clientSocket.getOutputStream();
              bw=new BufferedWriter(new OutputStreamWriter(o));
-             bw.write(BLUE+mess+"\n"+RESET);
+             bw.write(BLUE+s+"\n"+RESET);
              bw.flush();
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
