@@ -16,73 +16,81 @@ import java.util.logging.Logger;
  *
  * @author tommaso pignatta
  */
-public class Client {
+public class Client implements Runnable {
     String nome;
     String colore;
     Socket socket;
+    String nomeServer;
+    int porta;
     public static final String GREEN = "\u001B[32m";
     public static final String RESET = "\u001B[0m";
-    
-    public Client(String nome, String colore){
-        this.nome=nome;
-        this.colore=colore;
+
+    public Client(String nome, String nomeServer, int porta) {
+        this.nome = nome;
+        this.nomeServer = nomeServer;
+        this.porta = porta;
     }
-    
-    public void connetti(String nomeServer, int porta){
+
+    public void connetti(String nomeServer, int porta) {
         try {
             socket = new Socket(nomeServer, porta);
-            System.out.println(GREEN+"1) CONNESSIONE AVVENUTA CON IL SERVER"+RESET);
-        } catch(ConnectException ex){
-            System.out.println(GREEN+"ERRORE DI CONNESSIONE CON IL SERVER"+RESET);
-        } catch(UnknownHostException ex){
-            System.out.println(GREEN+"ERRORE NELLA RISOLUZIONE DEL NOME"+RESET);
-        }catch (IOException ex) {
+            System.out.println(GREEN + "1) CONNESSIONE AVVENUTA CON IL SERVER" + RESET);
+        } catch (ConnectException ex) {
+            System.out.println(GREEN + "ERRORE DI CONNESSIONE CON IL SERVER" + RESET);
+        } catch (UnknownHostException ex) {
+            System.out.println(GREEN + "ERRORE NELLA RISOLUZIONE DEL NOME" + RESET);
+        } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(GREEN+"ERRORE NELLA CONNESSIONE"+RESET);
+            System.out.println(GREEN + "ERRORE NELLA CONNESSIONE" + RESET);
         }
-        }
-    
-     public void leggi() {
-       InputStream i;
-       BufferedReader br;
-       String messaggio;
+    }
+
+    public void leggi() {
+        InputStream i;
+        BufferedReader br;
+        String messaggio;
         try {
             i = socket.getInputStream();
-            br=new BufferedReader(new InputStreamReader(i));
-            messaggio=br.readLine();
-            System.out.println(GREEN+"IL MESSAGGIO RICEVUTO E': "+messaggio+RESET);
+            br = new BufferedReader(new InputStreamReader(i));
+            messaggio = br.readLine();
+            System.out.println(GREEN + "IL MESSAGGIO RICEVUTO E': " + messaggio + RESET);
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-     
-      public void scrivi() {
+
+    public void scrivi() {
         OutputStream o;
         BufferedWriter bw;
         String s = "CLIENT ON";
-         try {
-             o = socket.getOutputStream();
-             bw = new BufferedWriter(new OutputStreamWriter(o));
-             bw.write(GREEN+s+"\n"+RESET);
-             bw.flush();
+        try {
+            o = socket.getOutputStream();
+            bw = new BufferedWriter(new OutputStreamWriter(o));
+            bw.write(GREEN + s + "\n" + RESET);
+            bw.flush();
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void chiudi(){
-        if(socket!=null){
-            try{
+
+    public void chiudi() {
+        if (socket != null) {
+            try {
                 socket.close();
-                System.out.println(GREEN+"4) CHIUSURA DELLA CONNESSIONE CON IL SERVER"+RESET);
-            }
-            catch(ConnectException ex){
-            System.err.println(GREEN+"ERRORE: SERVER NON CONNESSO"+RESET);
-            }
-            catch(IOException ex){
-             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println(GREEN + "4) CHIUSURA DELLA CONNESSIONE CON IL SERVER" + RESET);
+            } catch (ConnectException ex) {
+                System.err.println(GREEN + "ERRORE: SERVER NON CONNESSO" + RESET);
+            } catch (IOException ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
-    
+
+    @Override
+    public void run() {
+        connetti(nomeServer, porta);
+        scrivi();
+        leggi();
+        chiudi();
+    }
 }
